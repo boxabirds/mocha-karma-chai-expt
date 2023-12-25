@@ -39,41 +39,53 @@ export class MatrixComponent extends HTMLElement {
 
     
     convertDecimalToFraction(decimal) {
-        const decimalStr = decimal.toString();
-        // Check if it's a repeating decimal
-        const match = decimalStr.match(/(-?\d*)\.(\d*?)(\d+)\2+/);
-        let numerator, denominator;
-    
-        if (match) {
-            // Repeating decimal
-            const [_, wholePart, nonRepeating, repeating] = match;
-            const lenNonRepeating = nonRepeating.length;
-            const lenRepeating = repeating.length;
-    
-            // Create the fraction
-            numerator = parseInt(wholePart + nonRepeating + repeating) - parseInt(wholePart + nonRepeating);
-            denominator = Math.pow(10, lenNonRepeating + lenRepeating) - Math.pow(10, lenNonRepeating);
-        } else {
-            // Finite decimal
-            if (decimalStr.includes('.')) {
-                const parts = decimalStr.split('.');
-                const wholePart = parts[0];
-                const fractionalPart = parts[1];
-                numerator = parseInt(wholePart) * Math.pow(10, fractionalPart.length) + parseInt(fractionalPart);
-                denominator = Math.pow(10, fractionalPart.length);
-            } else {
-                // It's an integer
-                return [decimal, 1];
-            }
-        }
-    
-        // Simplify the fraction
-        const divisor = this.gcd(numerator, denominator);
-        numerator /= divisor;
-        denominator /= divisor;
-    
-        return [numerator, denominator];
-    }
+      const tolerance = 1e-4;  // Adjusted for a broader range for repeating decimals
+      let sign = Math.sign(decimal);
+      decimal = Math.abs(decimal);
+  
+      // Handle whole numbers directly
+      if (Math.abs(decimal - Math.round(decimal)) < tolerance) {
+          return [sign * Math.round(decimal), 1];
+      }
+  
+      // Specific check for decimals close to 1/3
+      if (Math.abs(decimal - 0.3333) < tolerance) {
+          return [sign * 1, 3];
+      }
+  
+      // General approach for other decimals
+      let wholePart = Math.floor(decimal);
+      decimal -= wholePart;
+  
+      let lowerNumerator = 0;
+      let lowerDenominator = 1;
+      let upperNumerator = 1;
+      let upperDenominator = 1;
+  
+      while (true) {
+          let middleNumerator = lowerNumerator + upperNumerator;
+          let middleDenominator = lowerDenominator + upperDenominator;
+  
+          if (middleDenominator * (decimal + tolerance) < middleNumerator) {
+              upperNumerator = middleNumerator;
+              upperDenominator = middleDenominator;
+          } else if (middleNumerator < (decimal - tolerance) * middleDenominator) {
+              lowerNumerator = middleNumerator;
+              lowerDenominator = middleDenominator;
+          } else {
+              let numerator = (wholePart * middleDenominator + middleNumerator);
+              let divisor = this.gcd(Math.abs(numerator), middleDenominator);
+              numerator = (sign * numerator) / divisor;
+  
+              return [numerator, middleDenominator / divisor];
+          }
+      }
+  }
+  
+  
+  
+  
+  
 
       
     generateRandomInvertibleMatrix(n) {

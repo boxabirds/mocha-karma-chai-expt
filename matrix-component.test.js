@@ -6,23 +6,35 @@ describe('MatrixComponent', function() {
         expect(component).to.be.instanceOf(MatrixComponent);
     });
 });
-// describe('MatrixComponent', function() {
-//   let component;
+describe('MatrixComponent', function() {
+  let component;
 
-//   beforeEach(() => {
-//     component = new MatrixComponent();
-//   });
+  beforeEach(() => {
+    component = new MatrixComponent();
+  });
 
-//   describe('convertDecimalToFraction', function() {
-//     it('converts 1 to [1, 1]', function() {
-//       expect(component.convertDecimalToFraction(1)).to.deep.equal([1, 1]);
-//     });
+  describe('convertDecimalToFraction', function() {
+    it('converts 1 to [1, 1]', function() {
+      expect(component.convertDecimalToFraction(1)).to.deep.equal([1, 1]);
+    });
 
-//     it('converts -0.1 to [-1, 10]', function() {
-//       expect(component.convertDecimalToFraction(-0.1)).to.deep.equal([-1, 10]);
-//     });
+    it('converts -0.1 to [-1, 10]', function() {
+      expect(component.convertDecimalToFraction(-0.1)).to.deep.equal([-1, 10]);
+    });
 
-//     // Add more tests as per your examples
-//   });
-// });
+    it('converts -0.4 to [-2, 5]', function() {
+      expect(component.convertDecimalToFraction(-0.4)).to.deep.equal([-2, 5]);
+    });
+
+    it('converts 0.3333 to [1, 3]', function() {
+      expect(component.convertDecimalToFraction(0.33333)).to.deep.equal([1, 3]);
+    });
+
+    it('converts 0.125 to [1, 8]', function() {
+      expect(component.convertDecimalToFraction(0.125)).to.deep.equal([1, 8]);
+    });
+
+    // Add more tests as per your examples
+  });
+});
 
