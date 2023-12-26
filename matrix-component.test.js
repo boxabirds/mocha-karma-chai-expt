@@ -30,6 +30,46 @@ describe('MatrixComponent', function() {
       expect(component.convertDecimalToFraction(0.33333)).to.deep.equal([1, 3]);
     });
 
+    it('converts 0.09090909 to [1, 11]', function() {
+      expect(component.convertDecimalToFraction(0.09090909)).to.deep.equal([1, 11]);
+    });
+
+    it('converts 0.14285714285 to [1, 7]', function() {
+      expect(component.convertDecimalToFraction(0.14285714285)).to.deep.equal([1, 7]);
+    });
+
+    it('converts 0.666666 to [2, 3]', function() {
+      expect(component.convertDecimalToFraction(0.666666)).to.deep.equal([2, 3]);
+    });
+
+    it('converts 0.08333333 to [1, 12]', function() {
+      expect(component.convertDecimalToFraction(0.08333333)).to.deep.equal([1, 12]);
+    });
+
+    it('converts 0.16666 to [1, 6]', function() {
+      expect(component.convertDecimalToFraction(0.16666)).to.deep.equal([1, 6]);
+    });
+
+    it('converts 0.076923076923076923 to [1, 13]', function() {
+      expect(component.convertDecimalToFraction(0.076923076923076923)).to.deep.equal([1, 13]);
+    });
+
+    it('converts 0.0714285714285714285 to [1, 14]', function() {
+      expect(component.convertDecimalToFraction(0.0714285714285714285)).to.deep.equal([1, 14]);
+    });
+
+    it('converts 0.0666666 to [1, 15]', function() {
+      expect(component.convertDecimalToFraction(0.0666666)).to.deep.equal([1, 15]);
+    });
+
+    it('converts 0.001 to [1, 100]', function() {
+      expect(component.convertDecimalToFraction(0.01)).to.deep.equal([1, 100]);
+    });
+
+    it('converts 0.0001 to [1, 1000]', function() {
+      expect(component.convertDecimalToFraction(0.001)).to.deep.equal([1, 1000]);
+    });
+
     it('converts 0.125 to [1, 8]', function() {
       expect(component.convertDecimalToFraction(0.125)).to.deep.equal([1, 8]);
     });

@@ -38,51 +38,38 @@ export class MatrixComponent extends HTMLElement {
     }
 
     
-    convertDecimalToFraction(decimal) {
-      const tolerance = 1e-4;  // Adjusted for a broader range for repeating decimals
-      let sign = Math.sign(decimal);
-      decimal = Math.abs(decimal);
-  
-      // Handle whole numbers directly
-      if (Math.abs(decimal - Math.round(decimal)) < tolerance) {
-          return [sign * Math.round(decimal), 1];
+    convertDecimalToFraction(floatValue, tolerance=0.0001) {
+      let isNegative = false;
+      if(floatValue < 0) {
+        isNegative = true;
+        floatValue = Math.abs(floatValue);
       }
+    
+      let numerator = 1;
+      let h1 = 0;
+      let denominator = 0;
+      let h2 = 1;
+      let b = floatValue;
+    
+      do {
+        const a = Math.floor(b);
+        let aux = numerator;
+        numerator = a * numerator + h1;
+        h1 = aux;
+        aux = denominator;
+        denominator = a * denominator + h2;
+        h2 = aux;
+        b = 1 / (b - a);
+      } while (Math.abs(floatValue - numerator / denominator) > floatValue * tolerance);
+    
+      if(isNegative) {
+        numerator = -numerator;
+      }    
+      return [numerator,denominator]
+    }
+    
   
-      // Specific check for decimals close to 1/3
-      if (Math.abs(decimal - 0.3333) < tolerance) {
-          return [sign * 1, 3];
-      }
-  
-      // General approach for other decimals
-      let wholePart = Math.floor(decimal);
-      decimal -= wholePart;
-  
-      let lowerNumerator = 0;
-      let lowerDenominator = 1;
-      let upperNumerator = 1;
-      let upperDenominator = 1;
-  
-      while (true) {
-          let middleNumerator = lowerNumerator + upperNumerator;
-          let middleDenominator = lowerDenominator + upperDenominator;
-  
-          if (middleDenominator * (decimal + tolerance) < middleNumerator) {
-              upperNumerator = middleNumerator;
-              upperDenominator = middleDenominator;
-          } else if (middleNumerator < (decimal - tolerance) * middleDenominator) {
-              lowerNumerator = middleNumerator;
-              lowerDenominator = middleDenominator;
-          } else {
-              let numerator = (wholePart * middleDenominator + middleNumerator);
-              let divisor = this.gcd(Math.abs(numerator), middleDenominator);
-              numerator = (sign * numerator) / divisor;
-  
-              return [numerator, middleDenominator / divisor];
-          }
-      }
-  }
-  
-  
+
   
   
   
