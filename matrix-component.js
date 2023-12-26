@@ -38,18 +38,22 @@ export class MatrixComponent extends HTMLElement {
     }
 
     
-    convertDecimalToFraction(floatValue, tolerance=0.0001) {
+     convertDecimalToFraction(floatValue, tolerance = 0.0001) {
       let isNegative = false;
-      if(floatValue < 0) {
+      if (floatValue < 0) {
         isNegative = true;
         floatValue = Math.abs(floatValue);
       }
+    
+      // Separate the whole number and fractional parts
+      let wholePart = Math.floor(floatValue);
+      let fractionalPart = floatValue - wholePart;
     
       let numerator = 1;
       let h1 = 0;
       let denominator = 0;
       let h2 = 1;
-      let b = floatValue;
+      let b = fractionalPart;
     
       do {
         const a = Math.floor(b);
@@ -60,13 +64,27 @@ export class MatrixComponent extends HTMLElement {
         denominator = a * denominator + h2;
         h2 = aux;
         b = 1 / (b - a);
-      } while (Math.abs(floatValue - numerator / denominator) > floatValue * tolerance);
+      } while (Math.abs(fractionalPart - numerator / denominator) > fractionalPart * tolerance);
     
-      if(isNegative) {
-        numerator = -numerator;
-      }    
-      return [numerator,denominator]
+      if (isNegative) {
+        if (wholePart === 0 && numerator !== 0) {
+          // Apply the sign to the numerator if the whole part is zero
+          numerator = -numerator;
+        } else {
+          // Apply the sign to the whole part otherwise
+          wholePart = -wholePart;
+        }
+      }
+    
+      // Adjust the case when the fraction is 0 (i.e., the number was an integer)
+      if (fractionalPart === 0) {
+        return [wholePart, 0, 1]; // The fraction is 0/1 in this case
+      }
+      
+      return [wholePart, numerator, denominator];
     }
+    
+    
     
   
 
