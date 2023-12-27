@@ -448,7 +448,82 @@ export class MatrixComponent extends HTMLElement {
       }
   }
 
-  
+  hasAtLeastOneNonZeroOnDiagonal() {
+    for (let i = 0; i < Math.min(this._matrix.length, this._matrix[0].length); i++) {
+        if (this._matrix[i][i] !== 0) {
+            return true;
+        }
+    }
+    return false;
+}
+
+// Normalize the first pivot (non-zero element of the first row) to 1
+firstPivotNormalizedTo1() {
+    for (let i = 0; i < this._matrix[0].length; i++) {
+        if (this._matrix[0][i] !== 0) {
+            return this._matrix[0][i] === 1;
+        }
+    }
+    return false; // No non-zero element found in the first row
+}
+
+// Check if the matrix is in upper triangular form
+isUpperTriangularForm() {
+    for (let i = 1; i < this._matrix.length; i++) {
+        for (let j = 0; j < i; j++) {
+            if (this._matrix[i][j] !== 0) {
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
+// Check if all diagonal elements are 1
+allDiagonalsAre1() {
+    for (let i = 0; i < Math.min(this._matrix.length, this._matrix[0].length); i++) {
+        if (this._matrix[i][i] !== 1) {
+            return false;
+        }
+    }
+    return true;
+}
+
+// Check if the matrix is in row echelon form
+isInRowEchelonForm() {
+    let lastNonZeroRow = -1;
+    for (let i = 0; i < this._matrix.length; i++) {
+        let firstNonZeroIndex = this._matrix[i].findIndex(value => value !== 0);
+        if (firstNonZeroIndex === -1) {
+            continue; // Skip all-zero rows
+        }
+        if (firstNonZeroIndex <= lastNonZeroRow) {
+            return false; // A leading entry is not to the right of the one above it
+        }
+        lastNonZeroRow = firstNonZeroIndex;
+    }
+    return true;
+}
+
+// Check if the matrix is in reduced row echelon form
+isInReducedRowEchelonForm() {
+    if (!this.isInRowEchelonForm()) {
+        return false;
+    }
+    for (let i = 0; i < this._matrix.length; i++) {
+        let firstNonZeroIndex = this._matrix[i].findIndex(value => value !== 0);
+        if (firstNonZeroIndex !== -1 && this._matrix[i][firstNonZeroIndex] !== 1) {
+            return false; // Leading entry is not 1
+        }
+        for (let j = i + 1; j < this._matrix.length; j++) {
+            if (this._matrix[j][firstNonZeroIndex] !== 0) {
+                return false; // Entries above and below the leading 1 are not 0
+            }
+        }
+    }
+    return true;
+}
+
 
   get readonly() {
       return this._readonly;
