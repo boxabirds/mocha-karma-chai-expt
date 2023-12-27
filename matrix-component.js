@@ -524,6 +524,21 @@ isInReducedRowEchelonForm() {
     return true;
 }
 
+isIdentity() {
+  if (!this._matrix || this._matrix.length === 0 || this._matrix.length !== this._matrix[0].length) {
+      return false; // Ensure the matrix is square
+  }
+
+  for (let i = 0; i < this._matrix.length; i++) {
+      for (let j = 0; j < this._matrix[i].length; j++) {
+          if ((i === j && this._matrix[i][j] !== 1) || (i !== j && this._matrix[i][j] !== 0)) {
+              return false; // Check for 1s on the diagonal and 0s elsewhere
+          }
+      }
+  }
+  return true;
+}
+
 
   get readonly() {
       return this._readonly;

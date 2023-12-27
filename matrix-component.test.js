@@ -73,6 +73,24 @@ describe('MatrixComponent', function() {
     });
   });
 
+  describe('isIdentity', function() {
+    it('returns true for an identity matrix', function() {
+      component.matrix = [[1, 0, 0], [0, 1, 0], [0, 0, 1]];
+      expect(component.isIdentity()).to.be.true;
+    });
+
+    it('returns false for a non-identity matrix', function() {
+      component.matrix = [[1, 0, 0], [0, 2, 0], [0, 0, 1]];
+      expect(component.isIdentity()).to.be.false; 
+    });
+
+
+    it('returns false for a matrix with non-zero off-diagonal elements', function() {
+      component.matrix = [[1, 0, 0], [0, 1, 0], [1, 0, 1]];
+      expect(component.isIdentity()).to.be.false;
+    });
+  });
+  
   describe('isInReducedRowEchelonForm', function() {
     it('returns true for a matrix in reduced row echelon form', function() {
       component.matrix = [[1, 0, 0], [0, 1, 0], [0, 0, 1]];
@@ -84,6 +102,8 @@ describe('MatrixComponent', function() {
       expect(component.isInReducedRowEchelonForm()).to.be.false;
     });
   });  
+
+
 
   describe('convertDecimalToFraction', function() {
     it('converts 1 to [1,0, 1]', function() {
