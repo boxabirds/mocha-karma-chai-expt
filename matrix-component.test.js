@@ -18,8 +18,23 @@ describe('MatrixComponent', function() {
       expect(component.convertDecimalToFraction(1)).to.deep.equal([1,0, 1]);
     });
 
-    it('converts 3.1415926535 to [3, 14159, 100000]', function() {
+    it('converts 3.1415926535 to [3, 16, 113]', function() {
       expect(component.convertDecimalToFraction(3.1415926535)).to.deep.equal([3, 16, 113]);
+    });
+
+    it('converts -0.9999999999999999 to [-1, 0, 1]', function() {
+      expect(component.convertDecimalToFraction(-0.9999999999999999)).to.deep.equal([-1, 0, 1]);
+    });
+
+    it('converts 0.9999999999999999 to [1, 0, 1]', function() {
+      expect(component.convertDecimalToFraction(0.9999999999999999)).to.deep.equal([1, 0, 1]);
+    });
+    it('converts 0.0000000000000001 to [0, 0, 1]', function() {
+      expect(component.convertDecimalToFraction(0.0000000000000001)).to.deep.equal([0, 0, 1]);
+    });
+
+    it('converts 10.9999999999999999 to [10, 0, 1]', function() {
+      expect(component.convertDecimalToFraction(10.9999999999999999)).to.deep.equal([11, 0, 1]);
     });
 
     it('converts -0.1 to [0, -1, 10]', function() {
